@@ -2,7 +2,8 @@ const router = require("express").Router();
 const User = require("../models/User");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const secrets = require("../../secrets");
+// const secrets =  require("../../secrets");
+const secrets = process.env || require("../../secrets");
 const mailSender = require("../../utilities/mailSender");
 
 // Register
@@ -14,11 +15,11 @@ router.post("/register", async (req, res) => {
     }
     const user = await User.findOne({ username, email });
     if (user) return res.status(409).json({ msg: "User already exists" });
-    
+
     const salt = await bcrypt.genSalt(10);
     const hashPassword = await bcrypt.hash(password, salt);
     const hashConfirmPassword = await bcrypt.hash(confirmPassword, salt);
-    
+
     if (hashPassword !== hashConfirmPassword)
       return res.status(401).json({ msg: "Passwords do not match" });
     const newUser = new User({
@@ -115,11 +116,11 @@ router.patch("/resetPassword", async (req, res) => {
     let { otp, password, confirmPassword, email } = req.body;
     // search -> get the user
     let user = await User.findOne({ email: email });
-   
+
     let salt = await bcrypt.genSalt(10);
     let hashPassword = await bcrypt.hash(password, salt);
     let hashConfirmPassword = await bcrypt.hash(confirmPassword, salt);
-   
+
     let currentTime = Date.now();
     if (currentTime > user.otpExpiry) {
       user.otp = undefined;
@@ -136,8 +137,7 @@ router.patch("/resetPassword", async (req, res) => {
           result: "wrong otp",
         });
       } else {
-        user = await User.findOne(  { otp, email }
-        );
+        user = await User.findOne({ otp, email });
         user.otp = undefined;
         user.otpExpiry = undefined;
         user.password = hashPassword;
