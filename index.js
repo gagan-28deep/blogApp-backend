@@ -2,7 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const fileUpload = require("express-fileupload");
-const multer = require("multer");
+
 const path = require("path");
 const cors = require("cors");
 const app = express();
