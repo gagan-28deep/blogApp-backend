@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const fileUpload = require("express-fileupload");
+const multer = require("multer");
 const path = require("path");
 const cors = require("cors");
 const app = express();
@@ -53,7 +54,7 @@ app.post("/api/v1/upload", (req, res) => {
 });
 
 app.use(function (req, res) {
-  res.send("<h1>BAckend API</h1>");
+  res.send("<h1>Backend API</h1>");
 });
 
 // app.get("/", function (req, res) {
