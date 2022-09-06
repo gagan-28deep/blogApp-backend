@@ -36,6 +36,7 @@ app.post("/api/v1/upload", (req, res) => {
     return res.status(400).send("No files were uploaded.");
   }
   console.log(req.files);
+
   let filename = req.files.uploadFile.name;
   console.log("filename", filename);
   let file = req.files.uploadFile;
@@ -45,10 +46,12 @@ app.post("/api/v1/upload", (req, res) => {
   file.mv(uploadPath, (err) => {
     if (err) {
       console.log(err);
-      res.status(500).send(err);
+      res.status(500).json({
+        message : err.message});
     }
   });
-  res.status(200).send({
+  res.status(200).json({
+    result : file,
     msg: "File Uploaded",
   });
 });
