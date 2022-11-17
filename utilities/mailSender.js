@@ -18,7 +18,7 @@ async function mailSender(email, token) {
     from: '"Blogging Website 👻" <foo@example.com>', // sender address
     to: email, // list of receivers
     subject: "Hello ✔ Your reset token ", // Subject line
-    html: `<b>Your rest is  token ${token}?</b>`,
+    html: `<b>Your reset token is  ${token}?</b>`,
   };
   // send mail with defined transporter object
   let info = await transporter.sendMail(dataObj);

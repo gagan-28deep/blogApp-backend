@@ -82,6 +82,11 @@ router.post("/login", async (req, res) => {
 router.patch("/forgotPassword", async (req, res) => {
   try {
     let { email } = req.body;
+    if(!email){
+      res.status(401).json({
+        message : "Please enter Email Id"
+      })
+    }
     //    mail
     // by default -> FindAndUpdate -> not updated send document,
     // new =true -> you will get updated doc
@@ -99,6 +104,7 @@ router.patch("/forgotPassword", async (req, res) => {
         user,
         message: "Otp sent to your mail",
       });
+      // console.log("107" , user);
     } else {
       res.status(404).json({
         message: "user with this email not found",
@@ -108,6 +114,7 @@ router.patch("/forgotPassword", async (req, res) => {
     res.status(500).json({
       message: "Internal Server Error",
     });
+    console.log(err);
   }
 });
 
