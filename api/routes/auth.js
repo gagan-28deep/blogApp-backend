@@ -122,6 +122,11 @@ router.patch("/forgotPassword", async (req, res) => {
 router.patch("/resetPassword", async (req, res) => {
   try {
     let { otp, password, confirmPassword, email } = req.body;
+    if(!otp || !password || !confirmPassword || !email){
+      res.status(401).json({
+        message : "Please fill all the fields"
+      })
+    }
     // search -> get the user
     let user = await User.findOne({ email: email });
 
