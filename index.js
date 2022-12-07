@@ -22,7 +22,13 @@ mongoose
 // Middleware
 app.use(express.json());
 app.use(fileUpload());
-app.use(cors());
+app.use(cors({
+  'allowedHeaders': ['sessionId', 'Content-Type'],
+  'exposedHeaders': ['sessionId'],
+  'origin': '*',
+  'methods': 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  'preflightContinue': false
+}));
 
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/user", userRouter);
