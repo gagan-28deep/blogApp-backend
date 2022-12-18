@@ -3,6 +3,8 @@ const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const fileUpload = require("express-fileupload");
 
+const cron = require("node-cron");
+
 const path = require("path");
 const cors = require("cors");
 const app = express();
@@ -22,18 +24,32 @@ mongoose
 // Middleware
 app.use(express.json());
 app.use(fileUpload());
-app.use(cors({
-  'allowedHeaders': ['sessionId', 'Content-Type'],
-  'exposedHeaders': ['sessionId'],
-  'origin': '*',
-  'methods': 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  'preflightContinue': false
-}));
+app.use(
+  cors({
+    allowedHeaders: ["sessionId", "Content-Type"],
+    exposedHeaders: ["sessionId"],
+    origin: "*",
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    preflightContinue: false,
+  })
+);
+
+// cron.schedule("*/10 * * * * *", function (req, res, next) {
+//   console.log("Running after 10 secs");
+//   res.send("Server is running");
+//   next();
+// });
 
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/user", userRouter);
 app.use("/api/v1/post", postRouter);
 app.use("/api/v1/category", categoryRouter);
+
+
+// THis is dummy route
+app.get("/api/v1/hello" , function(req , res , next){
+  res.send("Hello from server")
+})
 
 app.use("/images", express.static(path.join(__dirname, "/uploads/")));
 
@@ -53,11 +69,12 @@ app.post("/api/v1/upload", (req, res) => {
     if (err) {
       console.log(err);
       res.status(500).json({
-        message : err.message});
+        message: err.message,
+      });
     }
   });
   res.status(200).json({
-    result : file,
+    result: file,
     msg: "File Uploaded",
   });
 });
