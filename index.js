@@ -24,16 +24,18 @@ mongoose
 // Middleware
 app.use(express.json());
 app.use(fileUpload());
-app.use(
-  cors({
-    allowedHeaders: ["sessionId", "Content-Type"],
-    exposedHeaders: ["sessionId"],
-    origin: "*",
-    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-    preflightContinue: false,
-  })
-);
+// app.use(
+//   cors({
+//     allowedHeaders: ["sessionId", "Content-Type"],
+//     exposedHeaders: ["sessionId"],
+//     origin: "*",
+//     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+//     preflightContinue: false,
+//   })
+// );
 
+
+app.use(cors())
 // cron.schedule("*/10 * * * * *", function (req, res, next) {
 //   console.log("Running after 10 secs");
 //   res.send("Server is running");
