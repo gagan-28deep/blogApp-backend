@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const fileUpload = require("express-fileupload");
+const Post = require("./api/models/Post.js");
 
 const cron = require("node-cron");
 
@@ -34,8 +35,7 @@ app.use(fileUpload());
 //   })
 // );
 
-
-app.use(cors())
+app.use(cors());
 // cron.schedule("*/10 * * * * *", function (req, res, next) {
 //   console.log("Running after 10 secs");
 //   res.send("Server is running");
@@ -47,11 +47,10 @@ app.use("/api/v1/user", userRouter);
 app.use("/api/v1/post", postRouter);
 app.use("/api/v1/category", categoryRouter);
 
-
 // THis is dummy route
-app.get("/api/v1/hello" , function(req , res , next){
-  res.send("Hello from server")
-})
+app.get("/api/v1/hello", function (req, res, next) {
+  res.send("Hello from server");
+});
 
 app.use("/images", express.static(path.join(__dirname, "/uploads/")));
 
@@ -79,6 +78,19 @@ app.post("/api/v1/upload", (req, res) => {
     result: file,
     msg: "File Uploaded",
   });
+});
+
+// Get all images
+app.get("/api/v1/image", async (req, res) => {
+  try {
+    const images = await Post.find({} , {"photo" : 4});
+    res.status(200).json({ images });
+  } catch (err) {
+    res.status(500).json({
+      msg: "Internal Server error",
+    });
+    console.log("error" , err);
+  }
 });
 
 app.use(function (req, res) {
